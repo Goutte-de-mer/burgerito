@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 export const metadata: Metadata = {
   title: "Burgerito",
   description: "Next.js + temps réeel",
-  icons: "/favicon.ico",
+  icons: "/logo.svg",
 };
 
 export default function RootLayout({
