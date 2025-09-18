@@ -4,16 +4,17 @@
 @theme {
   --color-background: #0e0e0e;
   --color-primary: #f89a2f;
+  --color-primary-hover: #f4aa55;
   --font-main: "Poppins", sans-serif;
 }
 
 body {
-  @apply bg-background text-white font-main p-4 max-w-6xl mx-auto;
+  @apply bg-background text-white font-main p-4 max-w-6xl mx-auto grid grid-rows-[auto_1fr] min-h-screen;
 }
 .btn-primary {
-  @apply bg-primary rounded-sm py-2.5 px-4.5 cursor-pointer hover:bg-primary/80 transition active:scale-95;
+  @apply bg-primary rounded-sm py-2 px-4.5 cursor-pointer hover:bg-primary-hover transition active:scale-95;
 }
 
 .btn-secondary {
-  @apply rounded-sm py-2.5 px-4.5 cursor-pointer bg-white/10 hover:bg-white/20 transition active:scale-95;
+  @apply rounded-sm py-2 px-4.5 cursor-pointer bg-white/10 hover:bg-white/20 transition active:scale-95;
 }

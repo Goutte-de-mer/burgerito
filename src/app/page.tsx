@@ -1,9 +1,10 @@
 import Hero from "@/components/layout/Hero";
 import BurgerCard from "@/components/BurgerCard";
 import BurgerItem from "@/types/burgerItem";
+import { getProducts } from "@/services/productService";
+
 export default async function Home() {
-  const data = await fetch("https://node-eemi.vercel.app/api/products");
-  const products = await data.json();
+  const products = await getProducts();
 
   const burgers = products.items.map((item: BurgerItem) => (
     <BurgerCard key={item.id} burger={item} />
