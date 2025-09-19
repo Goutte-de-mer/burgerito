@@ -6,7 +6,7 @@ import Link from "next/link";
 import BurgerItem from "@/types/burgerItem";
 import { notFound } from "next/navigation";
 
-const Product = async ({ params }: { params: { id: string } }) => {
+const Product = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const products = await getProducts();
   const product = products.items.find((item: BurgerItem) => item.id === id);
