@@ -2,7 +2,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <div className="w-full h-[350px] sm:h-[450px] rounded-3xl relative overflow-hidden p-3 flex flex-col pb-0 mt-8 justify-end">
+    <div className="w-full h-[350px] sm:h-[450px] rounded-3xl relative overflow-hidden p-3 flex flex-col pb-0 justify-end">
       <div className="absolute inset-0 bg-[url(/hero-bg.jpg)] bg-cover bg-center brightness-30 -z-10" />
       <div className="w-fit mx-auto">
         <p className="md:text-lg mb-4 max-w-2xl">

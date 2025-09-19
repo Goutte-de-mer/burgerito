@@ -13,7 +13,7 @@ export default async function Home() {
   return (
     <main>
       <Hero />
-      <div className="grid grid-cols-4 gap-4 mt-12">{burgers}</div>
+      <div className="mt-12 grid grid-cols-4 gap-4">{burgers}</div>
     </main>
   );
 }

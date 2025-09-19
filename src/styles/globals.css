@@ -9,12 +9,21 @@
 }
 
 body {
-  @apply bg-background text-white font-main p-4 max-w-6xl mx-auto grid grid-rows-[auto_1fr] min-h-screen;
+  @apply bg-background font-main mx-auto grid min-h-screen max-w-6xl grid-rows-[auto_1fr] p-4 text-white;
 }
+
+main {
+  @apply mt-12;
+}
+
 .btn-primary {
-  @apply bg-primary rounded-sm py-2 px-4.5 cursor-pointer hover:bg-primary-hover transition active:scale-95;
+  @apply bg-primary hover:bg-primary-hover cursor-pointer rounded-sm px-4.5 py-2 transition active:scale-95;
 }
 
 .btn-secondary {
-  @apply rounded-sm py-2 px-4.5 cursor-pointer bg-white/10 hover:bg-white/20 transition active:scale-95;
+  @apply cursor-pointer rounded-sm bg-white/10 px-4.5 py-2 transition hover:bg-white/20 active:scale-95;
+}
+
+.input {
+  @apply rounded-md bg-white/10 px-3 py-2 transition outline-none placeholder:text-center placeholder:text-white focus-within:placeholder:text-white/40;
 }

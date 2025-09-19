@@ -3,14 +3,10 @@ import { Undo2 } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <main className="h-full flex flex-col justify-center items-center gap-6">
-      <h2 className="text-2xl">Ressource introuvable 🧐</h2>
-      <p>{`Nous n'avons pas pu trouver la ressoucre demandée`}</p>
-      <Link
-        href={"/"}
-        className="flex gap-2.5 text-white/50 font-light text-sm items-center mb-12"
-      >
-        <Undo2 size={20} /> {`Retour à l'accueil`}
+    <main className="flex h-full flex-col items-center justify-center gap-6">
+      <h2 className="mb-3 text-7xl font-extrabold">Page 404</h2>
+      <Link href={"/"} className="btn-primary">
+        {`Retour à l'accueil`}
       </Link>
     </main>
   );

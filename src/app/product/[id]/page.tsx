@@ -21,7 +21,7 @@ const Product = async ({ params }: { params: Promise<{ id: string }> }) => {
     .slice(0, 4);
 
   return (
-    <main className="mt-12">
+    <main>
       <Link
         href={"/"}
         className="flex gap-2.5 text-white/50 font-light text-sm items-center mb-12"

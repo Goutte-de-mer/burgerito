@@ -10,7 +10,7 @@ const BurgerDetails = ({
   return (
     <div className="flex flex-col">
       <h1 className="text-7xl font-bold"> {name} </h1>
-      <div className="flex flex-col mx-auto md:mx-0 md:flex-row gap-10 mt-10">
+      <div className="mx-auto mt-10 flex flex-col gap-10 md:mx-0 md:flex-row">
         <Image
           src={imageUrl}
           alt={name}
@@ -18,14 +18,14 @@ const BurgerDetails = ({
           height={300}
           className="rounded-md"
         />
-        <div className="space-y-6 flex flex-col pt-2">
+        <div className="flex flex-col space-y-6 pt-2">
           <h2 className="text-xl font-medium">Description</h2>
-          <p className="text-white/50 font-light text-justify">
+          <p className="text-justify font-light text-white/50">
             {" "}
             {description}{" "}
           </p>
-          <div className="flex justify-between items-center border-t border-white/20 pt-6 mt-auto gap-2.5 w-fit">
-            <p className="rounded-sm py-2 px-4.5 bg-white text-black font-medium">
+          <div className="mt-auto flex w-fit items-center justify-between gap-2.5 border-t border-white/20 pt-6">
+            <p className="rounded-sm bg-white px-4.5 py-2 font-medium text-black">
               € {price}{" "}
             </p>
             <button className="btn-primary">Ajouter au panier</button>
