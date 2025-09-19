@@ -10,7 +10,7 @@ export default function NotFound() {
         href={"/"}
         className="flex gap-2.5 text-white/50 font-light text-sm items-center mb-12"
       >
-        <Undo2 size={20} /> Retour à l'accueil
+        <Undo2 size={20} /> {`Retour à l'accueil`}
       </Link>
     </main>
   );
