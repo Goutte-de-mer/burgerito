@@ -1,6 +1,7 @@
 "use client;";
 import { signup } from "@/app/actions/auth";
 import { useActionState } from "react";
+import { CircleAlert } from "lucide-react";
 
 const SignupForm = () => {
   const [state, action] = useActionState(signup, undefined);
@@ -9,9 +10,10 @@ const SignupForm = () => {
       <div className="grid grid-cols-2 gap-2.5">
         <div className="col-span-2">
           {state?.errors?.name && (
-            <p className="text-sm font-light text-white/50">
-              {state.errors.name}
-            </p>
+            <div className="mb-2.5 flex flex-nowrap items-center gap-x-2.5 text-red-300">
+              <CircleAlert size={20} />
+              <p className="text-sm font-light">{state.errors.name}</p>
+            </div>
           )}
           <input
             id="name"
@@ -41,12 +43,20 @@ const SignupForm = () => {
       </div>
 
       {state?.errors?.password && (
-        <p className="text-sm font-light text-white/50">
-          {state.errors.password}
-        </p>
+        <div className="mt-2.5 flex flex-nowrap items-center gap-x-2.5 text-red-300">
+          <CircleAlert size={20} />
+          <p className="text-sm font-light text-red-300">
+            {state.errors.password}
+          </p>
+        </div>
       )}
       {state?.errors?.email && (
-        <p className="text-sm font-light text-white/50">{state.errors.email}</p>
+        <div className="mt-2.5 flex flex-nowrap items-center gap-x-2.5 text-red-300">
+          <CircleAlert size={20} />
+          <p className="text-sm font-light text-red-300">
+            {state.errors.email}
+          </p>
+        </div>
       )}
       <button type="submit" className="btn-primary mx-auto mt-6 min-w-60">
         Confirmer

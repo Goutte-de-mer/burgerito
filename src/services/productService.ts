@@ -1,5 +1,5 @@
 export async function getProducts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+  const res = await fetch(`${process.env.API_URL}/products`);
   if (!res.ok) {
     throw new Error("Erreur lors du chargement des produits");
   }
@@ -7,9 +7,9 @@ export async function getProducts() {
 }
 
 export async function getProductById(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
+  const res = await fetch(`${process.env.API_URL}/products/${id}`);
   if (!res.ok) {
-    throw new Error("Erreur lor du chargement du produit");
+    throw new Error("Erreur lors du chargement du produit");
   }
   return res.json();
 }
