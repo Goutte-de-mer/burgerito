@@ -1,5 +1,6 @@
 "use server";
-import AuthFormState from "@/types/authFormState";
+import { cookies } from "next/headers";
+import type { AuthFormState } from "@/types/authFormState";
 import { loginUser, registerUser } from "@/services/authService";
 
 export async function signup(
@@ -32,7 +33,16 @@ export async function signup(
   }
 
   try {
-    await registerUser(name.trim(), email, password);
+    const { token, user } = await registerUser(name.trim(), email, password);
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: "auth_token",
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
     return { success: true, errors: {} };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Une erreur est survenue";
@@ -54,10 +64,20 @@ export async function login(
 
   // Appel API
   try {
-    await loginUser(email, password);
+    const { token, user } = await loginUser(email, password);
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: "auth_token",
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
     return { success: true, error: null };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Une erreur est survenue";
+    console.error("loginUser failed:", e);
     return { success: false, error: message };
   }
 }

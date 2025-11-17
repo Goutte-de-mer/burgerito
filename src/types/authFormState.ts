@@ -1,8 +1,9 @@
-export default interface AuthFormState {
+export type AuthFormState = {
   success: boolean;
   errors: {
     name?: string;
-    eamil?: string;
+    email?: string;
     password?: string;
+    form?: string;
   };
-}
+};

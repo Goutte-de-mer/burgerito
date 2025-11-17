@@ -18,7 +18,7 @@ export async function registerUser(
   email: string,
   password: string,
 ) {
-  const res = await fetch(`${process.env.API_URL}/register`, {
+  const res = await fetch(`${process.env.API_URL}/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, password }),
@@ -27,7 +27,7 @@ export async function registerUser(
 }
 
 export async function loginUser(email: string, password: string) {
-  const res = await fetch(`${process.env.API_URL}/login`, {
+  const res = await fetch(`${process.env.API_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
