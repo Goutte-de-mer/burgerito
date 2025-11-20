@@ -1,7 +1,10 @@
 "use server";
 import { cookies } from "next/headers";
 import type { AuthFormState } from "@/types/authFormState";
+import type { LoginFormState } from "@/types/loginFormState";
 import { loginUser, registerUser } from "@/services/authService";
+import { createSession } from "../lib/session";
+import { redirect } from "next/navigation";
 
 export async function signup(
   _prevState: AuthFormState | undefined,
@@ -51,15 +54,18 @@ export async function signup(
 }
 
 export async function login(
-  _prevState: { success: boolean; error: string | null } | undefined,
+  _prevState: LoginFormState | undefined,
   formData: FormData,
-) {
+): Promise<LoginFormState> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
   //Validation
   if (!email || !password) {
-    return { success: false, error: "Tous les champs sont obligatoires" };
+    return {
+      success: false,
+      error: "Tous les champs sont obligatoires",
+    };
   }
 
   // Appel API
@@ -74,10 +80,16 @@ export async function login(
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
     });
-    return { success: true, error: null };
+    await createSession(user);
   } catch (e) {
     const message = e instanceof Error ? e.message : "Une erreur est survenue";
     console.error("loginUser failed:", e);
     return { success: false, error: message };
   }
+  redirect("/");
+}
+
+export async function logoutAction() {
+  const cookieStore = await cookies();
+  cookieStore.delete("auth_token");
 }
