@@ -1,7 +1,8 @@
-import React from "react";
+import { getSession } from "@/app/lib/session";
 
-const Profile = () => {
-  return <div>page profil</div>;
+const Profile = async () => {
+  const user = await getSession();
+  return <div>Bonjour {user?.name} </div>;
 };
 
 export default Profile;

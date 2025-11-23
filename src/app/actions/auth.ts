@@ -44,13 +44,15 @@ export async function signup(
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 5,
     });
-    return { success: true, errors: {} };
+    await createSession(user);
+    // return { success: true, errors: {} };
   } catch (e) {
     const message = e instanceof Error ? e.message : "Une erreur est survenue";
     return { success: false, errors: { form: message } };
   }
+  redirect("/");
 }
 
 export async function login(
@@ -78,7 +80,7 @@ export async function login(
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 5,
     });
     await createSession(user);
   } catch (e) {
@@ -92,4 +94,6 @@ export async function login(
 export async function logoutAction() {
   const cookieStore = await cookies();
   cookieStore.delete("auth_token");
+  cookieStore.delete("session");
+  redirect("/");
 }

@@ -7,31 +7,30 @@ import type User from "@/types/user";
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload: SessionPayload) {
-  return new SignJWT(payload)
+export async function encrypt<T>(payload: T, expirationTime?: string) {
+  return new SignJWT(payload as any)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime(expirationTime || "14d")
     .sign(encodedKey);
 }
 
-export async function decrypt(
+export async function decrypt<T>(
   session: string | undefined = "",
-): Promise<SessionPayload | null> {
+): Promise<T | null> {
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ["HS256"],
     });
-    return payload as SessionPayload;
+    return payload as T;
   } catch (error) {
-    console.log("Failed to verify session");
     return null;
   }
 }
 
 export async function createSession(user: User) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ user, expiresAt });
+  const expiresAt = new Date(Date.now() + 5 * 60 * 60 * 1000);
+  const session = await encrypt<SessionPayload>({ user, expiresAt }, "5h");
   const cookieStore = await cookies();
 
   cookieStore.set("session", session, {
@@ -49,7 +48,7 @@ export async function getSession(): Promise<User | null> {
 
   if (!session) return null;
 
-  const payload = await decrypt(session);
+  const payload = await decrypt<SessionPayload>(session);
 
   if (!payload || new Date(payload.expiresAt) < new Date()) {
     return null;
@@ -60,13 +59,13 @@ export async function getSession(): Promise<User | null> {
 
 export async function updateSession() {
   const session = (await cookies()).get("session")?.value;
-  const payload = await decrypt(session);
+  const payload = await decrypt<SessionPayload>(session);
 
   if (!session || !payload) {
     return null;
   }
 
-  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const expires = new Date(Date.now() + 5 * 60 * 60 * 1000);
 
   const cookieStore = await cookies();
   cookieStore.set("session", session, {

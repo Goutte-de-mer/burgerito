@@ -1,15 +1,21 @@
 import { getSession } from "@/app/lib/session";
 import Image from "next/image";
 import Link from "next/link";
+import LogoutButton from "@/components/LogoutButton";
+import CartButton from "../CartButton";
+import { getCart } from "@/app/lib/cart";
+
 const Header = async () => {
   const user = await getSession();
+  const cart = await getCart();
   return (
     <header className="z-30 flex items-center justify-between">
       <Link href={"/"}>
         <Image src="/logo.svg" alt="Logo" width={120} height={60} />
       </Link>
 
-      <div className="flex gap-2.5">
+      <div className="flex items-center gap-2.5">
+        <CartButton cart={cart} />
         {!user ? (
           <>
             <Link href={"/register"} className="btn-secondary">
@@ -21,7 +27,7 @@ const Header = async () => {
           </>
         ) : (
           <>
-            <button className="btn-logout">Me déconnecter</button>
+            <LogoutButton />
             <Link href={"/profile"} className="btn-primary">
               Mon profil
             </Link>

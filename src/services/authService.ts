@@ -42,7 +42,7 @@ export async function loginUser(
 }
 
 export async function me(authToken: string): Promise<MeResponse> {
-  const res = await fetch(`${process.env.API_URL}/auth/register`, {
+  const res = await fetch(`${process.env.API_URL}/auth/me`, {
     method: "GET",
     headers: { Authorization: "Bearer " + authToken },
   });

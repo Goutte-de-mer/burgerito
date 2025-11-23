@@ -1,7 +1,10 @@
+"use client";
 import Image from "next/image";
 import BurgerDetailsProps from "@/types/burgerDetailsProps";
+import { addToCartAction } from "@/app/actions/cart";
 
 const BurgerDetails = ({
+  id,
   name,
   description,
   price,
@@ -28,7 +31,20 @@ const BurgerDetails = ({
             <p className="rounded-sm bg-white px-4.5 py-2 font-medium text-black">
               € {price}{" "}
             </p>
-            <button className="btn-primary">Ajouter au panier</button>
+            <button
+              className="btn-primary"
+              onClick={() => {
+                addToCartAction({
+                  productId: id,
+                  quantity: 1,
+                  name: name,
+                  imageUrl: imageUrl,
+                  price: price,
+                });
+              }}
+            >
+              Ajouter au panier
+            </button>
           </div>
         </div>
       </div>

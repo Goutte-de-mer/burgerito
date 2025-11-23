@@ -1,8 +1,9 @@
-import React from "react";
+"use client";
 import BurgerItem from "@/types/burgerItem";
 import Image from "next/image";
 import { Info } from "lucide-react";
 import Link from "next/link";
+import { addToCartAction } from "@/app/actions/cart";
 
 type Props = {
   burger: BurgerItem;
@@ -29,7 +30,20 @@ const BurgerCard = ({ burger }: Props) => {
         >
           <Info color="white" />
         </Link>
-        <button className="btn-primary">Ajouter au panier</button>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            addToCartAction({
+              productId: burger.id,
+              quantity: 1,
+              name: burger.name,
+              imageUrl: burger.imageUrl,
+              price: burger.price,
+            });
+          }}
+        >
+          Ajouter au panier
+        </button>
       </div>
     </div>
   );
