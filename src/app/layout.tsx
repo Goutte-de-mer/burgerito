@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import Header from "@/components/layout/Header";
-import { UserProvider } from "@/context/UserContext";
 
 export const metadata: Metadata = {
   title: "Burgerito",
@@ -24,10 +23,8 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <UserProvider>
-          <Header />
-          {children}
-        </UserProvider>
+        <Header />
+        {children}
       </body>
     </html>
   );
