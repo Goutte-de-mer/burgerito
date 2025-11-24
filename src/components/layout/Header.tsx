@@ -15,7 +15,7 @@ const Header = async () => {
       </Link>
 
       <div className="flex items-center gap-2.5">
-        <CartButton cart={cart} />
+        <CartButton cart={cart} isLoggedIn={!!user} />
         {!user ? (
           <>
             <Link href={"/register"} className="btn-secondary">

@@ -1,5 +1,5 @@
 "use client";
-import { ShoppingCart, Plus, Minus, Trash2, X } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2, X, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CartItem from "@/types/cartItem";
@@ -7,14 +7,18 @@ import {
   updateCartItemAction,
   removeFromCartAction,
   clearCartAction,
+  createOrderAction,
 } from "@/app/actions/cart";
 
 type CartButtonProps = {
   cart: CartItem[];
+  isLoggedIn: boolean;
 };
 
-const CartButton = ({ cart }: CartButtonProps) => {
+const CartButton = ({ cart, isLoggedIn }: CartButtonProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isCreatingOrder, setIsCreatingOrder] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleUpdateQuantity = async (
@@ -33,6 +37,32 @@ const CartButton = ({ cart }: CartButtonProps) => {
   const handleClearCart = async () => {
     await clearCartAction();
     router.refresh();
+  };
+
+  const handleCreateOrder = async () => {
+    if (!isLoggedIn || cart.length === 0) return;
+
+    setIsCreatingOrder(true);
+    setError(null);
+
+    try {
+      const result = await createOrderAction();
+
+      if (result.success) {
+        setIsOpen(false);
+        router.refresh();
+        // TODO: Rediriger vers la page de confirmation de commande
+        // router.push(`/orders/${result.order._id}`);
+      } else {
+        setError(result.error || "Erreur lors de la création de la commande");
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Erreur lors de la commande",
+      );
+    } finally {
+      setIsCreatingOrder(false);
+    }
   };
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -132,22 +162,39 @@ const CartButton = ({ cart }: CartButtonProps) => {
                 <p className="text-lg font-bold">TOTAL</p>
                 <p className="text-lg font-bold">{total.toFixed(2)} €</p>
               </div>
+              {error && (
+                <div className="mb-3 rounded-sm bg-red-50 p-2 text-sm text-red-600">
+                  {error}
+                </div>
+              )}
               <div className="flex gap-2">
                 <button
                   onClick={handleClearCart}
-                  className="flex-1 rounded-sm border border-red-500 bg-white px-3 py-2 text-sm font-semibold text-red-500 transition hover:bg-red-50"
+                  disabled={isCreatingOrder}
+                  className="flex-1 rounded-sm border border-red-500 bg-white px-3 py-2 text-sm font-semibold whitespace-nowrap text-red-500 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Vider le panier
                 </button>
-                <button
-                  onClick={() => {
-                    // TODO: Rediriger vers la page de commande
-                    setIsOpen(false);
-                  }}
-                  className="flex-1 rounded-sm bg-black px-3 py-2 text-sm font-semibold text-white transition hover:bg-gray-800"
-                >
-                  Commander
-                </button>
+                {isLoggedIn ? (
+                  <button
+                    onClick={handleCreateOrder}
+                    disabled={isCreatingOrder || cart.length === 0}
+                    className="flex flex-1 items-center justify-center gap-2 rounded-sm bg-black px-3 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isCreatingOrder ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        Commande...
+                      </>
+                    ) : (
+                      "Commander"
+                    )}
+                  </button>
+                ) : (
+                  <p className="text-xs text-slate-400">
+                    Connectez vous pour commander
+                  </p>
+                )}
               </div>
             </div>
           </>
