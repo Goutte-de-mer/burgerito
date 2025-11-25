@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import Header from "@/components/layout/Header";
-import ChatSupportWrapper from "@/components/ChatSupportWrapper";
 
 export const metadata: Metadata = {
   title: "Burgerito",
@@ -26,7 +25,6 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
-        <ChatSupportWrapper />
       </body>
     </html>
   );
