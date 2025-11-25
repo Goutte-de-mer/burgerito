@@ -51,8 +51,7 @@ const CartButton = ({ cart, isLoggedIn }: CartButtonProps) => {
       if (result.success) {
         setIsOpen(false);
         router.refresh();
-        // TODO: Rediriger vers la page de confirmation de commande
-        // router.push(`/orders/${result.order._id}`);
+        router.push("/confirmation");
       } else {
         setError(result.error || "Erreur lors de la création de la commande");
       }
