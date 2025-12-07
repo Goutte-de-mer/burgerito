@@ -1,16 +1,21 @@
 import type Order from "@/types/order";
 
-async function handleResponse<T>(res: Response): Promise<T> {
-  const contentType = res.headers.get("content-type");
-  const isJson = contentType && contentType.includes("application/json");
-  const body = isJson ? await res.json().catch(() => ({})) : {};
+type OrderItem = {
+  _id: string;
+  product: {
+    _id: string;
+    name: string;
+    price: number;
+    imageUrl: string;
+  };
+  priceAtPurchase: number;
+  order: string;
+};
 
-  if (!res.ok) {
-    const message = (body && (body.message as string)) || `HTTP ${res.status}`;
-    throw new Error(message);
-  }
-  return body as T;
-}
+type GetOrderByIdResponse = {
+  order: Order;
+  items: OrderItem[];
+};
 
 type CreateOrderResponse = {
   order: {
@@ -33,6 +38,18 @@ type CreateOrderResponse = {
     order: string;
   }>;
 };
+
+async function handleResponse<T>(res: Response): Promise<T> {
+  const contentType = res.headers.get("content-type");
+  const isJson = contentType && contentType.includes("application/json");
+  const body = isJson ? await res.json().catch(() => ({})) : {};
+
+  if (!res.ok) {
+    const message = (body && (body.message as string)) || `HTTP ${res.status}`;
+    throw new Error(message);
+  }
+  return body as T;
+}
 
 export async function createOrder(
   authToken: string,
@@ -64,23 +81,6 @@ export async function getMyOrders(
   });
   return handleResponse<ListOrdersResponse>(res);
 }
-
-type OrderItem = {
-  _id: string;
-  product: {
-    _id: string;
-    name: string;
-    price: number;
-    imageUrl: string;
-  };
-  priceAtPurchase: number;
-  order: string;
-};
-
-type GetOrderByIdResponse = {
-  order: Order;
-  items: OrderItem[];
-};
 
 export async function getOrderById(
   authToken: string,
