@@ -43,6 +43,7 @@ jobs:
           ansible-playbook -i ansible/inventory.yml ansible/deploy.yml \
             --connection=local \
             --extra-vars "ansible_python_interpreter=/usr/bin/python3" \
-            -e "app_path=/tmp/burgerito"
+            -e "app_path=/tmp/burgerito" \
+            -e "deploy_user=runner"
         env:
           ANSIBLE_HOST_KEY_CHECKING: False

@@ -7,7 +7,7 @@
     app_path: /var/www/{{ app_name }}
     node_version: "20"
     pm2_app_name: "{{ app_name }}"
-    
+
   tasks:
     - name: Update apt cache
       apt:
@@ -40,9 +40,9 @@
       file:
         path: "{{ app_path }}"
         state: directory
-        owner: "{{ ansible_user | default('ubuntu') }}"
-        group: "{{ ansible_user | default('ubuntu') }}"
-        mode: '0755'
+        owner: "{{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }}"
+        group: "{{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }}"
+        mode: "0755"
 
     - name: Copy application files
       copy:
@@ -76,7 +76,7 @@
       template:
         src: ecosystem.config.js.j2
         dest: "{{ app_path }}/ecosystem.config.js"
-        mode: '0644'
+        mode: "0644"
 
     - name: Start/Restart application with PM2
       shell: |
@@ -90,7 +90,7 @@
         PORT: "3000"
 
     - name: Setup PM2 startup script
-      shell: pm2 startup systemd -u {{ ansible_user | default('ubuntu') }} --hp /home/{{ ansible_user | default('ubuntu') }}
+      shell: pm2 startup systemd -u {{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }} --hp /home/{{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }}
       register: pm2_startup
       changed_when: false
 
@@ -98,7 +98,7 @@
       template:
         src: nginx.conf.j2
         dest: /etc/nginx/sites-available/{{ app_name }}
-        mode: '0644'
+        mode: "0644"
       notify: restart nginx
 
     - name: Enable Nginx site
@@ -120,4 +120,3 @@
         name: nginx
         state: restarted
         enabled: yes
-
