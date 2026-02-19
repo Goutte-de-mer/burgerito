@@ -1,0 +1,123 @@
+---
+- name: Deploy Burgerito Application
+  hosts: all
+  become: yes
+  vars:
+    app_name: burgerito
+    app_path: /var/www/{{ app_name }}
+    node_version: "20"
+    pm2_app_name: "{{ app_name }}"
+    
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - git
+          - build-essential
+          - nginx
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Node.js via NodeSource
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_{{ node_version }}.x | bash -
+        apt-get install -y nodejs
+      when: ansible_os_family == "Debian"
+
+    - name: Install PM2 globally
+      npm:
+        name: pm2
+        global: yes
+
+    - name: Create application directory
+      file:
+        path: "{{ app_path }}"
+        state: directory
+        owner: "{{ ansible_user | default('ubuntu') }}"
+        group: "{{ ansible_user | default('ubuntu') }}"
+        mode: '0755'
+
+    - name: Copy application files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ app_path }}/{{ item }}"
+        mode: preserve
+      loop:
+        - package.json
+        - package-lock.json
+        - next.config.ts
+        - tsconfig.json
+        - .next
+      when: item != ".next" or item is defined
+
+    - name: Copy .next directory
+      synchronize:
+        src: .next/
+        dest: "{{ app_path }}/.next/"
+        delete: yes
+        recursive: yes
+      delegate_to: localhost
+      when: ansible_host != "localhost"
+
+    - name: Install production dependencies
+      npm:
+        path: "{{ app_path }}"
+        production: yes
+        state: present
+
+    - name: Create PM2 ecosystem file
+      template:
+        src: ecosystem.config.js.j2
+        dest: "{{ app_path }}/ecosystem.config.js"
+        mode: '0644'
+
+    - name: Start/Restart application with PM2
+      shell: |
+        cd {{ app_path }}
+        pm2 delete {{ pm2_app_name }} || true
+        pm2 start ecosystem.config.js
+        pm2 save
+      environment:
+        API_URL: "https://node-eemi.vercel.app/api"
+        NODE_ENV: "production"
+        PORT: "3000"
+
+    - name: Setup PM2 startup script
+      shell: pm2 startup systemd -u {{ ansible_user | default('ubuntu') }} --hp /home/{{ ansible_user | default('ubuntu') }}
+      register: pm2_startup
+      changed_when: false
+
+    - name: Configure Nginx
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/{{ app_name }}
+        mode: '0644'
+      notify: restart nginx
+
+    - name: Enable Nginx site
+      file:
+        src: /etc/nginx/sites-available/{{ app_name }}
+        dest: /etc/nginx/sites-enabled/{{ app_name }}
+        state: link
+      notify: restart nginx
+
+    - name: Remove default Nginx site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted
+        enabled: yes
+

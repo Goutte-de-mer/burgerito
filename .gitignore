@@ -56,3 +56,8 @@ coverage/
 # Ansible
 *.retry
 .ansible/
+
+# Consignes
+*.pdf
+CI_CD_Ansible_Avancé_Projet.md
+SETUP.md
