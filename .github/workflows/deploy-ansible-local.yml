@@ -5,40 +5,39 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - '**.md'
-      - '.gitignore'
+      - "**.md"
+      - ".gitignore"
 
 jobs:
   deploy:
     name: Deploy with Ansible (Local)
     runs-on: ubuntu-latest
-    needs: []
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-      
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build application
         run: npm run build
         env:
           API_URL: https://node-eemi.vercel.app/api
-      
+
       - name: Install Ansible
         run: |
           sudo apt-get update
           sudo apt-get install -y ansible
-      
+
       - name: Display Ansible version
         run: ansible --version
-      
+
       - name: Run Ansible playbook locally
         run: |
           ansible-playbook -i ansible/inventory.yml ansible/deploy.yml \
@@ -47,4 +46,3 @@ jobs:
             -e "app_path=/tmp/burgerito"
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
-
