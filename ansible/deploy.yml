@@ -68,7 +68,12 @@
         dest: "{{ app_path }}/.next/"
         delete: yes
         recursive: yes
+        rsync_opts:
+          - "--no-perms"
+          - "--no-owner"
+          - "--no-group"
       delegate_to: localhost
+      run_once: true
 
     - name: Install production dependencies
       npm:
