@@ -49,7 +49,7 @@ jobs:
       - name: Run Ansible playbook
         run: |
           ansible-playbook -i ansible/inventory.yml ansible/deploy.yml \
-            --extra-vars "server_ip=${{ secrets.SERVER_IP }}" \
+            --extra-vars "server_ip=${{ secrets.SERVER_IP }} ec2_user=${{ secrets.SERVER_USER }}" \
             --private-key ~/.ssh/id_rsa
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
