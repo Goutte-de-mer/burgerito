@@ -39,9 +39,7 @@
       failed_when: false
 
     - name: Install PM2 globally
-      npm:
-        name: pm2
-        global: yes
+      shell: npm install -g pm2 --force
       when: pm2_check.rc != 0
 
     - name: Create application directory
@@ -87,16 +85,17 @@
     - name: Start/Restart application with PM2
       shell: |
         cd {{ app_path }}
-        pm2 delete {{ pm2_app_name }} || true
-        pm2 start ecosystem.config.js
-        pm2 save
+        /usr/local/bin/pm2 delete {{ pm2_app_name }} || true
+        /usr/local/bin/pm2 start ecosystem.config.js
+        /usr/local/bin/pm2 save
       environment:
+        PATH: "/usr/local/bin:{{ ansible_env.PATH | default('') }}"
         API_URL: "https://node-eemi.vercel.app/api"
         NODE_ENV: "production"
         PORT: "3000"
 
     - name: Setup PM2 startup script
-      shell: pm2 startup systemd -u {{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }} --hp /home/{{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }}
+      shell: /usr/local/bin/pm2 startup systemd -u {{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }} --hp /home/{{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }}
       register: pm2_startup
       changed_when: false
 
