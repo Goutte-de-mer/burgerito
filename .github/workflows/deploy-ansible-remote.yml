@@ -2,47 +2,47 @@ name: CD Pipeline #2 - GitHub Actions + Ansible
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
+  # push:
+  #   branches: [main]
+  #   paths-ignore:
+  #     - '**.md'
+  #     - '.gitignore'
 
 jobs:
   deploy:
     name: Deploy with Ansible (Remote)
     runs-on: ubuntu-latest
     environment: production
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-      
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build application
         run: npm run build
         env:
           API_URL: https://node-eemi.vercel.app/api
-      
+
       - name: Install Ansible
         run: |
           sudo apt-get update
           sudo apt-get install -y ansible
-      
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-      
+
       - name: Run Ansible playbook
         run: |
           ansible-playbook -i ansible/inventory.yml ansible/deploy.yml \
@@ -50,5 +50,4 @@ jobs:
             --private-key ~/.ssh/id_rsa
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
-          ANSIBLE_SSH_COMMON_ARGS: '-o StrictHostKeyChecking=no'
-
+          ANSIBLE_SSH_COMMON_ARGS: "-o StrictHostKeyChecking=no"
