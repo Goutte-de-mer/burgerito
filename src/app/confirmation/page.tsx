@@ -8,7 +8,7 @@ const Confirmation = () => {
         Votre commande a bien été enregistrée. Merci !
       </h1>
       <Link href={"/"} className="btn-primary">
-        Retour à l'accueil
+        Retour à l&apos;accueil
       </Link>
     </main>
   );

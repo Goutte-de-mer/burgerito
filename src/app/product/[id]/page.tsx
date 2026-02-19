@@ -17,7 +17,6 @@ const Product = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const randomProducts = products.items
     .filter((item: BurgerItem) => item.id !== id)
-    .sort(() => 0.5 - Math.random())
     .slice(0, 4);
 
   return (

@@ -59,7 +59,7 @@ const Profile = async () => {
           <div className="rounded-lg border border-white/10 bg-white/5 p-8 text-center">
             <Package className="mx-auto mb-4 h-12 w-12 text-white/30" />
             <p className="text-lg text-white/70">
-              Vous n'avez pas encore de commandes
+              {`Vous n'avez pas encore de commandes`}
             </p>
           </div>
         ) : (
