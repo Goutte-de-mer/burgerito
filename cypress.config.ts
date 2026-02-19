@@ -1,21 +1,20 @@
-import { defineConfig } from 'cypress'
+import { defineConfig } from "cypress";
 
 export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    baseUrl: 'http://localhost:3000',
+    baseUrl: "http://localhost:3000",
     video: true,
     screenshotOnRunFailure: true,
-    videosFolder: 'cypress/videos',
-    screenshotsFolder: 'cypress/screenshots',
+    videosFolder: "cypress/videos",
+    screenshotsFolder: "cypress/screenshots",
   },
   component: {
     devServer: {
-      framework: 'next',
-      bundler: 'webpack',
+      framework: "next",
+      bundler: "webpack",
     },
   },
-})
-
+});

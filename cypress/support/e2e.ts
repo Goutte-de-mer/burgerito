@@ -14,21 +14,22 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
 // Ignorer les erreurs d'hydratation React/Next.js dans les tests E2E
 // Ces erreurs ne sont pas critiques pour les tests fonctionnels
-Cypress.on('uncaught:exception', (err, runnable) => {
+Cypress.on("uncaught:exception", (err, runnable) => {
   // Ignorer les erreurs d'hydratation React
-  if (err.message.includes('Hydration failed') || 
-      err.message.includes('hydration') ||
-      err.message.includes('Minified React error')) {
-    return false // Ne pas faire échouer le test
+  if (
+    err.message.includes("Hydration failed") ||
+    err.message.includes("hydration") ||
+    err.message.includes("Minified React error")
+  ) {
+    return false; // Ne pas faire échouer le test
   }
   // Laisser les autres erreurs faire échouer le test
-  return true
-})
+  return true;
+});
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-

@@ -23,14 +23,14 @@ const Product = async ({ params }: { params: Promise<{ id: string }> }) => {
     <main>
       <Link
         href={"/"}
-        className="flex gap-2.5 text-white/50 font-light text-sm items-center mb-12"
+        className="mb-12 flex items-center gap-2.5 text-sm font-light text-white/50"
       >
         <Undo2 size={20} /> {`Retour à l'accueil`}
       </Link>
       <BurgerDetails {...product} />
       <div className="mt-14">
-        <h2 className="text-2xl font-bold mb-5">Nos autres propositions</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <h2 className="mb-5 text-2xl font-bold">Nos autres propositions</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {randomProducts.map((item: BurgerItem) => (
             <BurgerCard key={item.id} burger={item} />
           ))}
