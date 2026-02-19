@@ -7,6 +7,7 @@
     app_path: /var/www/{{ app_name }}
     node_version: "20"
     pm2_app_name: "{{ app_name }}"
+    project_root: "{{ playbook_dir }}/.."
 
   tasks:
     - name: Update apt cache
@@ -46,7 +47,7 @@
 
     - name: Copy application files
       copy:
-        src: "{{ item }}"
+        src: "{{ project_root }}/{{ item }}"
         dest: "{{ app_path }}/{{ item }}"
         mode: preserve
       loop:
@@ -54,12 +55,11 @@
         - package-lock.json
         - next.config.ts
         - tsconfig.json
-        - .next
-      when: item != ".next" or item is defined
+      when: item != ".next"
 
     - name: Copy .next directory
       synchronize:
-        src: .next/
+        src: "{{ project_root }}/.next/"
         dest: "{{ app_path }}/.next/"
         delete: yes
         recursive: yes
