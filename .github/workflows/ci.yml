@@ -85,6 +85,8 @@ jobs:
   test-e2e:
     name: E2E Tests (Cypress)
     runs-on: ubuntu-latest
+    env:
+      API_URL: https://node-eemi.vercel.app/api
     steps:
       - uses: actions/checkout@v4
 
@@ -99,18 +101,6 @@ jobs:
 
       - name: Build application
         run: npm run build
-        env:
-          API_URL: https://node-eemi.vercel.app/api
-
-      - name: Start Next.js server
-        run: npm start &
-        env:
-          API_URL: https://node-eemi.vercel.app/api
-          PORT: 3000
-
-      - name: Wait for server
-        run: |
-          timeout 30 bash -c 'until curl -f http://localhost:3000; do sleep 1; done'
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
