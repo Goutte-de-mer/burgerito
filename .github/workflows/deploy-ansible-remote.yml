@@ -2,11 +2,11 @@ name: CD Pipeline #2 - GitHub Actions + Ansible
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
-  #   paths-ignore:
-  #     - '**.md'
-  #     - '.gitignore'
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
 
 jobs:
   deploy:
