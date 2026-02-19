@@ -32,10 +32,17 @@
         apt-get install -y nodejs
       when: ansible_os_family == "Debian"
 
+    - name: Check if PM2 is installed
+      command: which pm2
+      register: pm2_check
+      changed_when: false
+      failed_when: false
+
     - name: Install PM2 globally
       npm:
         name: pm2
         global: yes
+      when: pm2_check.rc != 0
 
     - name: Create application directory
       file:
@@ -64,7 +71,6 @@
         delete: yes
         recursive: yes
       delegate_to: localhost
-      when: ansible_host != "localhost"
 
     - name: Install production dependencies
       npm:
