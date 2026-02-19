@@ -98,6 +98,7 @@
         API_URL: "https://node-eemi.vercel.app/api"
         NODE_ENV: "production"
         PORT: "3000"
+      run_once: true
 
     - name: Setup PM2 startup script
       shell: /usr/local/bin/pm2 startup systemd -u {{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }} --hp /home/{{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }}
