@@ -63,7 +63,7 @@ jobs:
                 }
               }]
             };
-            EOF
+          EOF
             npm ci --production
             pm2 delete burgerito || true
             pm2 start ecosystem.config.js
