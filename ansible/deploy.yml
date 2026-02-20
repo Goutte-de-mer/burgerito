@@ -42,6 +42,18 @@
       shell: npm install -g pm2 --force
       when: pm2_check.rc != 0
 
+    - name: Get PM2 binary path
+      command: which pm2
+      environment:
+        PATH: "/usr/bin:/usr/local/bin:{{ ansible_env.PATH | default('') }}"
+      register: pm2_path
+      changed_when: false
+      failed_when: false
+
+    - name: Set PM2 binary path
+      set_fact:
+        pm2_bin: "{{ pm2_path.stdout if pm2_path.stdout else 'pm2' }}"
+
     - name: Create application directory
       file:
         path: "{{ app_path }}"
@@ -90,18 +102,20 @@
     - name: Start/Restart application with PM2
       shell: |
         cd {{ app_path }}
-        /usr/local/bin/pm2 delete {{ pm2_app_name }} || true
-        /usr/local/bin/pm2 start ecosystem.config.js
-        /usr/local/bin/pm2 save
+        {{ pm2_bin }} delete {{ pm2_app_name }} || true
+        {{ pm2_bin }} start ecosystem.config.js
+        {{ pm2_bin }} save
       environment:
-        PATH: "/usr/local/bin:{{ ansible_env.PATH | default('') }}"
+        PATH: "/usr/bin:/usr/local/bin:{{ ansible_env.PATH | default('') }}"
         API_URL: "https://node-eemi.vercel.app/api"
         NODE_ENV: "production"
         PORT: "3000"
       run_once: true
 
     - name: Setup PM2 startup script
-      shell: /usr/local/bin/pm2 startup systemd -u {{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }} --hp /home/{{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }}
+      shell: {{ pm2_bin }} startup systemd -u {{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }} --hp /home/{{ deploy_user | default(ansible_user) | default(ansible_user_id) | default('ubuntu') }}
+      environment:
+        PATH: "/usr/bin:/usr/local/bin:{{ ansible_env.PATH | default('') }}"
       register: pm2_startup
       changed_when: false
 

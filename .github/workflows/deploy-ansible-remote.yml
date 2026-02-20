@@ -43,9 +43,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Debug - Show server IP
-        run: 'echo "IP: ${{ secrets.SERVER_IP }}"'
-
       - name: Run Ansible playbook
         run: |
           ansible-playbook -i ansible/inventory.yml ansible/deploy.yml \
