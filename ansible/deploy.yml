@@ -87,6 +87,19 @@
       delegate_to: localhost
       run_once: true
 
+    - name: Copy public directory (static assets)
+      synchronize:
+        src: "{{ project_root }}/public/"
+        dest: "{{ app_path }}/public/"
+        delete: yes
+        recursive: yes
+        rsync_opts:
+          - "--no-perms"
+          - "--no-owner"
+          - "--no-group"
+      delegate_to: localhost
+      run_once: true
+
     - name: Install production dependencies
       npm:
         path: "{{ app_path }}"
