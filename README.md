@@ -306,3 +306,5 @@ Les pipelines génèrent des artefacts :
 ---
 
 **Projet réalisé dans le cadre du cours CI/CD Ansible Avancé**
+
+test
