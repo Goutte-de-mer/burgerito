@@ -303,8 +303,3 @@ Les pipelines génèrent des artefacts :
 - [Ansible Documentation](https://docs.ansible.com/)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 
----
-
-**Projet réalisé dans le cadre du cours CI/CD Ansible Avancé**
-
-test
