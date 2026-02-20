@@ -302,4 +302,3 @@ Les pipelines génèrent des artefacts :
 - [Cypress Documentation](https://docs.cypress.io/)
 - [Ansible Documentation](https://docs.ansible.com/)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
-
