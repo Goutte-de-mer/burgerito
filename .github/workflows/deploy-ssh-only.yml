@@ -2,11 +2,11 @@ name: CD Pipeline #3 - GitHub Actions SSH Only
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
-  #   paths-ignore:
-  #     - '**.md'
-  #     - '.gitignore'
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
 
 jobs:
   deploy:

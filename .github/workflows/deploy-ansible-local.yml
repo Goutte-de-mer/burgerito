@@ -2,11 +2,11 @@ name: CD Pipeline #1 - Ansible Local
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
-  #   paths-ignore:
-  #     - "**.md"
-  #     - ".gitignore"
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
 
 jobs:
   deploy:
