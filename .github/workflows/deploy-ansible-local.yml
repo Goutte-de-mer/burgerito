@@ -2,19 +2,22 @@ name: CD Pipeline Ansible local #1 - Ansible Local
 
 on:
   workflow_dispatch:
-  push:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
     branches: [main]
-    paths-ignore:
-      - "**.md"
-      - ".gitignore"
 
 jobs:
   deploy:
     name: Deploy with Ansible (Local)
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
