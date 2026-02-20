@@ -41,7 +41,7 @@ jobs:
       - name: Copy files to server
         run: |
           scp -i ~/.ssh/id_rsa -r .next public package.json package-lock.json \
-            next.config.ts tsconfig.json \
+            next.config.js tsconfig.json \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/burgerito/
 
       - name: Deploy on server via SSH
