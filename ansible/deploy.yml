@@ -105,6 +105,7 @@
         {{ pm2_bin }} delete {{ pm2_app_name }} || true
         {{ pm2_bin }} start ecosystem.config.js
         {{ pm2_bin }} save
+      become_user: "{{ deploy_user | default(ansible_user) | default('ubuntu') }}"
       environment:
         PATH: "/usr/bin:/usr/local/bin:{{ ansible_env.PATH | default('') }}"
         API_URL: "https://node-eemi.vercel.app/api"

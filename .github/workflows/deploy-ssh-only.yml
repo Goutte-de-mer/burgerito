@@ -1,12 +1,12 @@
-name: CD Pipeline #3 - GitHub Actions SSH Only
+name: CD Pipeline SSH Only #3 - GitHub Actions SSH Only
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
-  #   paths-ignore:
-  #     - "**.md"
-  #     - ".gitignore"
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
 
 jobs:
   deploy:
@@ -46,9 +46,27 @@ jobs:
 
       - name: Deploy on server via SSH
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'ENDSSH'
             cd /var/www/burgerito
+            cat > ecosystem.config.js << 'EOF'
+            module.exports = {
+              apps: [{
+                name: 'burgerito',
+                script: './node_modules/.bin/next',
+                args: 'start',
+                cwd: '/var/www/burgerito',
+                instances: 1,
+                env: {
+                  NODE_ENV: 'production',
+                  PORT: 3000,
+                  API_URL: 'https://node-eemi.vercel.app/api'
+                }
+              }]
+            };
+            EOF
             npm ci --production
-            pm2 restart burgerito || pm2 start npm --name burgerito -- start
+            pm2 delete burgerito || true
+            pm2 start ecosystem.config.js
+            pm2 save
             sudo systemctl reload nginx
-          EOF
+          ENDSSH

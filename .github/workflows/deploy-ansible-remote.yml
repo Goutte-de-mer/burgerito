@@ -1,4 +1,4 @@
-name: CD Pipeline #2 - GitHub Actions + Ansible
+name: CD Pipeline GitHub Actions + Ansible #2 - GitHub Actions + Ansible
 
 on:
   workflow_dispatch:

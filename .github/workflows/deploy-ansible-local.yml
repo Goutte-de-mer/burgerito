@@ -1,4 +1,4 @@
-name: CD Pipeline #1 - Ansible Local
+name: CD Pipeline Ansible local #1 - Ansible Local
 
 on:
   workflow_dispatch:
